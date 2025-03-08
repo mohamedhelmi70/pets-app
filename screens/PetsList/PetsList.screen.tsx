@@ -10,7 +10,7 @@ import {
 import { AppScreenProps, Pet } from '../../types';
 import { supabase } from '../../services';
 
-const PetCard = ({ pet, onPress }: { pet: Pet, onPress: () => void; }) => (
+const PetCard = React.memo(({ pet, onPress }: { pet: Pet, onPress: () => void; }) => (
     <TouchableOpacity style={styles.card_wrapper} onPress={onPress}>
         <View style={styles.card}>
             <Text style={styles.name}>{pet.name}</Text>
@@ -18,7 +18,7 @@ const PetCard = ({ pet, onPress }: { pet: Pet, onPress: () => void; }) => (
             <Text>Age: {pet.age} years</Text>
         </View>
     </TouchableOpacity>
-);
+));
 
 export const PetsListScreen: React.FC<AppScreenProps<'PetsList'>> = ({ navigation }) => {
     const [pets, setPets] = useState<Pet[]>([]);
