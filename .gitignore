@@ -1,0 +1,70 @@
+# OSX
+.DS_Store
+
+# Xcode
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+project.xcworkspace
+
+# Android/IntelliJ
+build/
+.idea
+.gradle
+local.properties
+*.iml
+*.hprof
+.cxx/
+*.keystore
+!debug.keystore
+
+# node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json # You may want to commit this file for teams using npm
+
+# Expo
+.expo/
+web-build/
+dist/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# env files
+.env*
+!.env.example
+
+# typescript
+*.tsbuildinfo
+
+# Jest
+.jest/
+coverage/
+
+# custom files
+.vscode/
+.firebase
+
+# metro bundler
+.metro-health-check*
+
+# logs
+*.log

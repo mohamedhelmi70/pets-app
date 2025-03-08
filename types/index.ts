@@ -1,3 +1,20 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends AppParamList {}
+  }
+}
+
+export type AppScreenProps<Screen extends keyof AppParamList> =
+  NativeStackScreenProps<AppParamList, Screen>;
+
+export type AppParamList = {
+  PetsList: undefined;
+  SingleProfile: { id: string };
+  AddNewVetVisit: { id: string };
+}
+
 export interface Pet {
   id: string;
   name: string;
