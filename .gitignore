@@ -49,7 +49,7 @@ dist/
 *.orig.*
 
 # env files
-.env*
+# .env*
 !.env.example
 
 # typescript
