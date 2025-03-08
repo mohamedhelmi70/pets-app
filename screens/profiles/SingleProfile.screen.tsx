@@ -32,15 +32,15 @@ function getThisMonthLogs(logs_bodycondition: BodyConditionLog[], logs_weight: W
   return { latestBodyConditionLog, latestWeightLog };
 }
 
-const PetCard = ({ pet }: { pet: Pet }) => (
+const PetCard = React.memo(({ pet }: { pet: Pet }) => (
   <View style={styles.card}>
     <Text style={styles.name}>{pet.name}</Text>
     <Text>Species: {pet.species}</Text>
     <Text>Age: {pet.age} years</Text>
   </View>
-);
+));
 
-const LogsTable = ({ data, }: { data: {id: string; name: string; date: string}[], }) => {
+const LogsTable = React.memo(({ data, }: { data: {id: string; name: string; date: string}[], }) => {
 
   if(data?.length == 0) {
     return (
@@ -60,9 +60,9 @@ const LogsTable = ({ data, }: { data: {id: string; name: string; date: string}[]
       ))}
     </View>
   )
-};
+});
 
-const VetVisitsTable = ({ data, onAddNew}: { data: VetVisitLog[], onAddNew: () => void}) => {
+const VetVisitsTable = React.memo(({ data, onAddNew}: { data: VetVisitLog[], onAddNew: () => void}) => {
 
   if(data?.length == 0) {
     return (
@@ -88,15 +88,32 @@ const VetVisitsTable = ({ data, onAddNew}: { data: VetVisitLog[], onAddNew: () =
       </TouchableOpacity>
     </View>
   )
-};
+});
 
-const HealthStatus = ({ pet }: { pet: Pet }) => (
+const HealthStatus = React.memo(({ pet }: { pet: Pet }) => (
   <View style={styles.healthStatus}>
     <Text style={styles.tableHeader}>Health Status</Text>
     <Text>Overall Health: {pet?.logs_weight?.length > 3 ? 'Good' : 'Needs More Data'}</Text>
     <Text>Last Vet Visit: 2 months ago</Text>
   </View>
-);
+));
+
+const TabSelector = React.memo(({ tabs, activeTab, onTabChange }: { tabs: typeof TABS, activeTab: string, onTabChange: (id: string) => void }) => (
+  <View style={styles.tabs}>
+    {tabs.map(tab => (
+      <TouchableOpacity 
+        key={tab.id}
+        disabled={tab.id === activeTab} 
+        onPress={() => onTabChange(tab.id)} 
+        style={[styles.tab, {backgroundColor: activeTab === tab.id ? '#f7f9e8' : '#fff'}]}
+      >
+        <Text style={[styles.tab_title, {color: activeTab === tab.id ? '#111' : '#7f7f7f'}]}>
+          {tab.name}
+        </Text>
+      </TouchableOpacity>
+    ))}
+  </View>
+));
 
 export const SingleProfileScreen: React.FC<AppScreenProps<'SingleProfile'>> = ({ route }) => {
   const { id } = route.params;
@@ -126,6 +143,9 @@ export const SingleProfileScreen: React.FC<AppScreenProps<'SingleProfile'>> = ({
     return TABS?.find(e => e?.id === tab);
   }, [tab]);
 
+  const handleTabChange = React.useCallback((tabId: string) => {
+    setTab(tabId);
+  }, []);
 
   useEffect(() => {
     const fetchPetData = async () => {
@@ -167,6 +187,8 @@ export const SingleProfileScreen: React.FC<AppScreenProps<'SingleProfile'>> = ({
     return <ActivityIndicator style={styles.loader} />;
   }
 
+ 
+
   if (error || !petData?.pet) {
     return (
       <View style={styles.container}>
@@ -191,15 +213,11 @@ export const SingleProfileScreen: React.FC<AppScreenProps<'SingleProfile'>> = ({
 
       <HealthStatus pet={petData?.pet} />
       
-      <View style={styles.tabs}>
-        {TABS?.map(e => (
-          <TouchableOpacity disabled={e?.id === tab} onPress={() => setTab(e?.id)} key={e?.id} style={[styles.tab, {backgroundColor: tab === e?.id ? '#f7f9e8' : '#fff'}]}>
-            <Text style={[styles.tab_title, {color: tab === e?.id ? '#111' : '#7f7f7f'}]}>
-              {e?.name}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <TabSelector 
+        tabs={TABS} 
+        activeTab={tab} 
+        onTabChange={handleTabChange} 
+      />
       
       {tab_obj?.id === 'Weight_Logs' && <LogsTable data={petData?.weightLogs?.map(e => ({...e, name: `Weight: ${e?.weight}Kg`, date: `Date: ${new Date(e?.date)?.toLocaleDateString()}`}))} />}
       {tab_obj?.id === 'Body_Condition' && <LogsTable data={petData?.bodyConditionLogs?.map(e => ({...e, name: `${e?.body_condition}`, date: `Date: ${new Date(e?.date)?.toLocaleDateString()}`}))} />}
