@@ -121,3 +121,6 @@ Modify the pet profile screen to include:
 - Include error handling and loading states
 - Consider edge cases and data validation
 - Focus on code quality and user experience 
+
+## Assumptions & Decisions
+  - PetsList screen to display list of pets and make the PetsList as the initial screen of the navigation.
